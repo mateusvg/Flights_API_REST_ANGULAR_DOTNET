@@ -18,14 +18,18 @@ builder.Services.AddSwaggerGen(
         }
         );
 
-        c.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["action"] + e.ActionDescriptor.RouteValues["controller"]}" );
+        c.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["action"] + e.ActionDescriptor.RouteValues["controller"]}");
     }
     );
 
 
 
 var app = builder.Build();
-app.UseCors(builder => builder.WithOrigins("*")); //Permitindo cors para todas as origens
+app.UseCors(builder => builder
+.WithOrigins("*")
+.AllowAnyMethod()
+.AllowAnyHeader()
+); //Permitindo cors para todas as origens
 
 app.UseSwagger().UseSwaggerUI();
 

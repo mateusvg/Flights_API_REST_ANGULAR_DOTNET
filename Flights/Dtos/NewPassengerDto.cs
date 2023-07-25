@@ -2,7 +2,7 @@
 {
     public record NewPassengerDto(
         string Email,
-        string FisrtName,
+        string FirstName,
         string LastName,
         bool Gender
         );

@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
@@ -10,6 +10,7 @@ import { SearchFlightsComponent } from './search-flights/search-flights.componen
 import { BookFlightComponent } from './book-flight/book-flight.component';
 import { RegisterPassengerComponent } from './register-passenger/register-passenger.component';
 
+//ReactiveFormsModule necessário para ligar o atributo form do componente html aos atributos dos inputs
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { RegisterPassengerComponent } from './register-passenger/register-passen
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
     RouterModule.forRoot([
       { path: '', component: SearchFlightsComponent, pathMatch: 'full' },
       { path: 'search-flights', component: SearchFlightsComponent },
