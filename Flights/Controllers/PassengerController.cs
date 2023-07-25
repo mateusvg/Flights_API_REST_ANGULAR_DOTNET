@@ -22,16 +22,43 @@ namespace Flights.Controllers
         {
             _passengerList.Add(dto);
             System.Diagnostics.Debug.WriteLine(_passengerList.Count);
-            return Ok();
+            return CreatedAtAction(nameof(Find), new { email = dto.Email }); // utiliza o metodo find abaixo para retornar uma URI com o e-mail criado ex: https:/Passenger?email=john%40teste.com
+            //return Ok();
             //throw new NotImplementedException();
         }
 
+        //ActionResult<retorna Passenger Read Model> nomeamos de Find (para encontrar pelo e-mail)
         [HttpGet]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public IEnumerable<NewPassengerDto> Search()
-            => _passengerList.ToList();
+        public ActionResult<PassengerRm> Find(string email)
+        {
+            var passenger = _passengerList.SingleOrDefault(f => f.Email == email);
+            if (email == null)
+            {
+                return NotFound();
+            }
+            //temos que criar um novo Read Model, pois o _passengerList retorna o DTO
+            var rm = new PassengerRm(
+                    passenger.Email,
+                    passenger.FirstName,
+                    passenger.LastName,
+                    passenger.Gender
+                );
+            return Ok(rm); // caso encontro o email na lista retorna no response body
+
+        }
+
+
+        ////Lista todos os passageiros
+
+        //[HttpGet("passengersTest")]
+        //[ProducesResponseType(201)]
+        //[ProducesResponseType(400)]
+        //[ProducesResponseType(500)]
+        //public IEnumerable<NewPassengerDto> Search()
+        //    => _passengerList.ToList();
 
     }
 }
