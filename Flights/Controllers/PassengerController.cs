@@ -34,19 +34,19 @@ namespace Flights.Controllers
         [ProducesResponseType(500)]
         public ActionResult<PassengerRm> Find(string email)
         {
-            var passenger = _passengerList.SingleOrDefault(f => f.Email == email);
+            var passenger = _passengerList.FirstOrDefault(f => f.Email == email);
             if (email == null)
             {
                 return NotFound();
             }
             //temos que criar um novo Read Model, pois o _passengerList retorna o DTO
-            var rm = new PassengerRm(
-                    passenger.Email,
-                    passenger.FirstName,
-                    passenger.LastName,
-                    passenger.Gender
-                );
-            return Ok(rm); // caso encontro o email na lista retorna no response body
+            //var rm = new PassengerRm(
+            //        passenger.Email,
+            //        passenger.FirstName,
+            //        passenger.LastName,
+            //        passenger.Gender
+            //    );
+            return Ok(passenger); // caso encontro o email na lista retorna no response body
 
         }
 

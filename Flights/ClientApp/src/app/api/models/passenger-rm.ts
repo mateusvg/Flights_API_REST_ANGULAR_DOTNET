@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-export interface NewPassengerDto {
+export interface PassengerRm {
   email?: null | string;
   firstName?: null | string;
   gender?: boolean;
