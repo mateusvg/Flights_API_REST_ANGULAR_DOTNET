@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { FlightService } from './../api/services/flight.service'
 import { BookDto, FlightRm } from '../api/models'
 import { AuthService } from '../auth/auth.service'
-import { FormBuilder } from '@angular/forms'
+import { FormBuilder, Validators } from '@angular/forms'
 
 @Component({
   selector: 'app-book-flight',
@@ -13,9 +13,11 @@ import { FormBuilder } from '@angular/forms'
 export class BookFlightComponent implements OnInit {
 
   flightId: string = "Not loaded"
+
   flight: FlightRm = {}
+
   form = this.fb.group({
-    number: [1]
+    number: [1, Validators.compose([Validators.required, Validators.min(1), Validators.max(254)])]
   })
 
   constructor(private route: ActivatedRoute,
@@ -38,7 +40,7 @@ export class BookFlightComponent implements OnInit {
 
   }
   private handleError = (err: any) => { //tratamento de erro
-    if (err.status == 400) {
+    if (err.status == 404) {
       alert("Flight Not Found")
       this.router.navigate(['/search-flights']) //redireconamento caso não encontre o ID do voo, para que o redirecinamento funcione, o metodo handleError tem que ser arrow function
     }
@@ -48,6 +50,10 @@ export class BookFlightComponent implements OnInit {
   }
 
   book() {
+
+    if (this.form.invalid)
+      return
+
     console.log(`Booking ${this.form.get('number')?.value} passengers for flights: ${this.flight.id}`)
 
     //Dto do bookingflight
@@ -60,6 +66,11 @@ export class BookFlightComponent implements OnInit {
     this.flightService.bookFlight({ body: booking }).subscribe(_ => this.router.navigate(['/my-booking']),
       this.handleError
     )
+  }
+
+
+  get number() {
+    return this.form.controls.number
   }
 
 }
