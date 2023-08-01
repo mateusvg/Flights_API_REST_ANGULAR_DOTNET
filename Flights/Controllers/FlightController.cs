@@ -5,7 +5,7 @@ using System;
 
 namespace Flights.Controllers
 {
-    [ApiController]
+    [ApiController] //realiza validações nos DTOs
     [Route("[controller]")]
 
     //[ProducesResponseType(400)] pode ser removido dos metodos abaixo e para que todos os status code seja disponivel para todos os metodos da API basta listalos aqui no controller
