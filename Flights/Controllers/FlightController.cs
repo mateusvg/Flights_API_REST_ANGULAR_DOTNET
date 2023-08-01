@@ -1,4 +1,5 @@
-﻿using Flights.Dtos;
+﻿using Flights.Domain.Entities;
+using Flights.Dtos;
 using Flights.ReadModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -18,28 +19,28 @@ namespace Flights.Controllers
 
         static Random random = new();
 
-        static private IList<BookDto> Booking = new List<BookDto>();
+        static private IList<Booking> Booking = new List<Booking>();
 
-        static private FlightRm[] flights = new FlightRm[]
+        static private Flight[] flights = new Flight[]
 
             {
         new (   Guid.NewGuid(),
                 "Latam",
                 random.Next(90, 5000).ToString(),
-                new TimePlaceRm("Belo Horizonte", System.Data.DataSetDateTime.Local),
-                new TimePlaceRm("Rio de Janeiro",System.Data.DataSetDateTime.Local),
+                new Timeplace("Belo Horizonte", System.Data.DataSetDateTime.Local),
+                new Timeplace("Rio de Janeiro",System.Data.DataSetDateTime.Local),
                     random.Next(1, 853)),
         new (   Guid.NewGuid(),
                 "Deutsche BA",
                 random.Next(90, 5000).ToString(),
-                new TimePlaceRm("Munchen",System.Data.DataSetDateTime.Local),
-                new TimePlaceRm("Schiphol",System.Data.DataSetDateTime.Local),
+                new Timeplace("Munchen",System.Data.DataSetDateTime.Local),
+                new Timeplace("Schiphol",System.Data.DataSetDateTime.Local),
                 random.Next(1, 853)),
         new (   Guid.NewGuid(),
                 "British Airways",
                 random.Next(90, 5000).ToString(),
-                new TimePlaceRm("Rio, Brazil",System.Data.DataSetDateTime.Local),
-                new TimePlaceRm("Vizzola-Ticino",System.Data.DataSetDateTime.Local),
+                new Timeplace("Rio, Brazil",System.Data.DataSetDateTime.Local),
+                new Timeplace("Vizzola-Ticino",System.Data.DataSetDateTime.Local),
                     random.Next(1, 853)),
 
             };
@@ -58,7 +59,18 @@ namespace Flights.Controllers
         [ProducesResponseType(typeof(IEnumerable<FlightRm>), 200)]
         [HttpGet]
         public IEnumerable<FlightRm> Search()
-            => flights;
+        {
+            //para a lista de Flight[] nos convertemos para FlightRm, selecionamos cada Id e criamos um novo objeto em array, e retornamos esse novo objet com o padrão de FlightRm
+            var flightRmlist = flights.Select(flight => new FlightRm(
+                flight.Id,
+                flight.Airline,
+                flight.Price,
+                new TimePlaceRm(flight.Departure.Place.ToString(), flight.Departure.Time),
+                new TimePlaceRm(flight.Arrival.Place.ToString(), flight.Arrival.Time),
+                flight.RemainingNumberOfSeats
+                )).ToArray();
+            return flightRmlist;
+        }
 
 
 
@@ -84,7 +96,7 @@ namespace Flights.Controllers
         [ProducesResponseType(500)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(200)]
-        public IActionResult Book(BookDto dto)
+        public IActionResult Book(Booking dto)
         {
             System.Diagnostics.Debug.WriteLine($"Booking a new flight {dto.FlightId}");
             var flightFound = flights.Any(f => f.Id == dto.FlightId);

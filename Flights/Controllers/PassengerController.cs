@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Flights.Dtos;
 using Flights.ReadModels;
+using Flights.Domain.Entities;
+using System.Xml;
 
 namespace Flights.Controllers
 {
@@ -9,7 +11,7 @@ namespace Flights.Controllers
     [ApiController]
     public class PassengerController : ControllerBase
     {
-        static private IList<NewPassengerDto> _passengerList = new List<NewPassengerDto>();
+        static private IList<Passenger> _passengerList = new List<Passenger>();
 
         [HttpPost]
         [ProducesResponseType(201)]
@@ -20,7 +22,13 @@ namespace Flights.Controllers
         //Se chamar-mos o endpoint Register abaixo, nos temos que informar que tipo de informação é o NewPassenger (Verificar o que irá passar no DTO NEWPASSENGERDTO)
         public IActionResult Register(NewPassengerDto dto)
         {
-            _passengerList.Add(dto);
+            _passengerList.Add(new Passenger(
+                dto.Email,
+                dto.FirstName,
+                dto.LastName,
+                dto.Gender
+                ));
+
             System.Diagnostics.Debug.WriteLine(_passengerList.Count);
             return CreatedAtAction(nameof(Find), new { email = dto.Email }); // utiliza o metodo find abaixo para retornar uma URI com o e-mail criado ex: https:/Passenger?email=john%40teste.com
             //return Ok();

@@ -22,7 +22,7 @@ export class RegisterPassengerComponent implements OnInit {
   //<form [formGroup]="form">
   //      <input formControlName="email" placeholder="Email" class="form-control" type="text" />
   form = this.fb.group({
-    email: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(100)])],
+    email: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(100), Validators.pattern('^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]+$')])],
     firstName: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(35)])],
     lastName: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(35)])],
     isFemale: [true, Validators.required]
