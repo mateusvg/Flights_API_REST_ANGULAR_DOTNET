@@ -1,4 +1,5 @@
-﻿using Flights.ReadModels;
+﻿using Flights.Dtos;
+using Flights.ReadModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -16,6 +17,8 @@ namespace Flights.Controllers
 
 
         static Random random = new();
+
+        static private IList<BookDto> Booking = new List<BookDto>();
 
         static private FlightRm[] flights = new FlightRm[]
 
@@ -74,6 +77,23 @@ namespace Flights.Controllers
             }
             return Ok(flight); // assim o metodo Ok resulta na criação de um status 200
 
+        }
+
+        [HttpPost]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(200)]
+        public IActionResult Book(BookDto dto)
+        {
+            System.Diagnostics.Debug.WriteLine($"Booking a new flight {dto.FlightId}");
+            var flightFound = flights.Any(f => f.Id == dto.FlightId);
+
+            if (flightFound == false)
+                return NotFound();
+
+            Booking.Add(dto);
+            return CreatedAtAction(nameof(Find), new { id = dto.FlightId }); // no reponse podemos achar o URI do flightID
         }
 
     }

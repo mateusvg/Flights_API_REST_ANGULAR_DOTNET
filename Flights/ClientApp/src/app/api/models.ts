@@ -1,5 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
+export { BookDto } from './models/book-dto';
 export { DataSetDateTime } from './models/data-set-date-time';
 export { FlightRm } from './models/flight-rm';
 export { NewPassengerDto } from './models/new-passenger-dto';
